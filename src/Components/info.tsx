@@ -1,7 +1,7 @@
 
 
 
-const info:React.FC = () => {
+const Info:React.FC = () => {
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -31,5 +31,5 @@ const info:React.FC = () => {
   )
 }
 
-export default info
+export default Info
 

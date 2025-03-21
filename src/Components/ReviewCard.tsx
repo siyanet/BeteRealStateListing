@@ -17,8 +17,8 @@ const ReviewCard:React.FC<ReviewCardProp> = ({name,word,number}) => {
   ))}
 
 </div>
-  <div className="w-full h-full flex items-end justify-center">
-    <div className="bg-amber-500 rounded-full p-3">{name.charAt(0)}</div>
+  <div className="w-full h-full flex items-center justify-end">
+    <div className="bg-amber-500 rounded-full px-2 py-0.5 font-bold font-lato ">{name.charAt(0)}</div>
     <p>{name}</p>
     </div>    
     </div>
