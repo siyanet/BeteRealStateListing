@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,14 +41,19 @@ INSTALLED_APPS = [
     
     'rest_framework',
     'rest_framework.authtoken',
-    
-    'dj_rest-auth',
+    "django.contrib.sites",
+    'dj_rest_auth',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'dj_rest_auth.registration',
+    'corsheaders',
+    "rest_framework_simplejwt.token_blacklist",
+    'Authentication',
+    'channels',
+    'chat',
     
-    'auth',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +64,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    'allauth.account.middleware.AccountMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'bete.urls'
@@ -79,6 +88,12 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'bete.wsgi.application'
+ASGI_APPLICATION = 'bete.asgi.application'
+CHANNEL_LAYERS = {
+    'default':{
+        'BACKEND': "channels.layers.InMemoryChannelLayer",
+    }
+}
 
 
 # Database
@@ -133,11 +148,41 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'bete.CustomUser'
+AUTH_USER_MODEL = 'Authentication.CustomUser'
 
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
+SITE_ID = 1  # Required for allauth
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=100),
+    "USER_ID_FIELD": "uuid",  # ✅ Set to match UUIDField
+    "USER_ID_CLAIM": "user_id",  # ✅ Ensures UUID is included in tokens
+}
+
+
+REST_USE_JWT = True
+JWT_AUTH_COOKIE = "my-auth-token"
+
+# settings.py
+ACCOUNT_LOGIN_METHODS = {"email"}
+
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # Ensure Allauth doesn't expect a username
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
