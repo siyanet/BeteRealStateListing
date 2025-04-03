@@ -140,6 +140,33 @@ class TeamMemberSerializer(serializers.ModelSerializer):
             user.save()
         return team_member
     
+    def update(self, instance, validated_data):
+        """Custom update method to handle nested 'user' updates"""
+        user_data = validated_data.pop('user', None)
+        req_roles = validated_data.pop('roles', [])
+
+        # Update user fields if provided
+        user_serializer = UserSerializer(
+            instance=instance.user,  # Make sure it's the actual 'user' instance that is being passed
+            data=user_data, 
+            partial=True, 
+            context=self.context  # This ensures any context from the parent is passed down
+        )
+
+        if user_serializer.is_valid(raise_exception=True):  # 🔥 This ensures email validation works correctly
+            # After validation, save the user instance
+            user_serializer.save()
+
+        # Update roles
+        instance.roles.set(req_roles)
+
+        # Update other fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        instance.save()
+        return instance
+    
     
 class AgentSerializer(serializers.ModelSerializer):
     owner_name = serializers.CharField(source = 'owner.business_name',read_only = True)
