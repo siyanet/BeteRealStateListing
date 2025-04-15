@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
-from rest_framework import viewsets, generics,permissions,status
+from rest_framework import viewsets, filters, generics,permissions,status
 from .models import Owner, TeamMember, CustomUser,Role,Agent,Property
 from rest_framework.response import Response
 from django.contrib.auth.hashers import check_password
@@ -12,6 +12,11 @@ from django.db import transaction
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action,api_view, permission_classes
+from rest_framework.pagination import PageNumberPagination
+from django_filters.rest_framework import DjangoFilterBackend
+import django_filters
+from django_filters import rest_framework as filters
+from rest_framework.filters import SearchFilter
 # Create your views here.
 User = get_user_model()
 
@@ -191,9 +196,34 @@ class AgentViewSet(viewsets.ModelViewSet):
         
         return Agent.objects.none()
     
+    
+    
+class PropertyPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = "page_size"
+    max_page_size = 100
+    
+
+class PropertyFilter(django_filters.FilterSet):
+    location = filters.CharFilter(field_name='location', lookup_expr='icontains')  # Allows partial search (case-insensitive)
+    price = filters.NumberFilter(field_name='price', lookup_expr='gte')  # For minimum price filter (greater than or equal to)
+    bedrooms = filters.NumberFilter(field_name='bedrooms')
+    bathrooms = filters.NumberFilter(field_name='bathrooms')
+    is_available = filters.BooleanFilter(field_name='is_available')
+
+    class Meta:
+        model = Property
+        fields = ['location', 'price', 'bedrooms', 'bathrooms', 'is_available']
+
+    
+    
 class PropertyViewSet(viewsets.ModelViewSet):
     serializer_class = PropertySerializer
-    
+    pagination_class = PropertyPagination
+
+    filter_backends = [SearchFilter,DjangoFilterBackend]
+    search_fields = ['title','description','location']
+    filterset_class = PropertyFilter
     def get_queryset(self):
         user = self.request.user
         if user.is_authenticated:

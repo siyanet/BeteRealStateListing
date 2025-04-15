@@ -25,7 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
     # email = serializers.EmailField()
     class Meta:
         model = CustomUser
-        fields = ['email', 'role', 'first_name','last_name','password']
+        fields = ['email', 'role', 'first_name','last_name','password','uuid']
         extra_kwargs = {'password': {'write_only': True}}
     
     def get_role(self,obj):
@@ -146,16 +146,10 @@ class TeamMemberSerializer(serializers.ModelSerializer):
         req_roles = validated_data.pop('roles', [])
 
         # Update user fields if provided
-        user_serializer = UserSerializer(
-            instance=instance.user,  # Make sure it's the actual 'user' instance that is being passed
-            data=user_data, 
-            partial=True, 
-            context=self.context  # This ensures any context from the parent is passed down
-        )
-
-        if user_serializer.is_valid(raise_exception=True):  # 🔥 This ensures email validation works correctly
-            # After validation, save the user instance
-            user_serializer.save()
+        if user_data:
+            for attr, value in user_data.items():
+                setattr(instance.user, attr, value)
+            instance.user.save()
 
         # Update roles
         instance.roles.set(req_roles)
@@ -205,10 +199,11 @@ class PropertyImageSerializer(serializers.ModelSerializer):
 class PropertySerializer(serializers.ModelSerializer):
     images = PropertyImageSerializer(many=True,read_only=True)
     agents = serializers.PrimaryKeyRelatedField(many=True,queryset=Agent.objects.all(),required=True)
-
+    agents_detail = AgentSerializer(source = 'agents', many = True, read_only = True)
+    owner_detail = OwnerSerializer(source = 'owner',read_only=True)
     class Meta:
         model = Property
-        fields = ['id','owner','agents','title','images','description','price','location','bedrooms','bathrooms','kitchen','living_rooms','square_meters','is_available','created_at','updated_at']
+        fields = ['id','owner','owner_detail', 'agents_detail','agents','title','images','description','price','location','bedrooms','bathrooms','kitchen','living_rooms','square_meters','is_available','created_at','updated_at']
         extra_kwargs = {"id": {'read_only': True},"owner": {"read_only": True}, "created_at": {"read_only": True}, "updated_at": {"read_only": True}}
 
     def create(self, validated_data):

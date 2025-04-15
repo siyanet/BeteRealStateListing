@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'Authentication',
     'channels',
     'chat',
+    'django_extensions',
     
 ]
 
@@ -91,7 +92,10 @@ WSGI_APPLICATION = 'bete.wsgi.application'
 ASGI_APPLICATION = 'bete.asgi.application'
 CHANNEL_LAYERS = {
     'default':{
-        'BACKEND': "channels.layers.InMemoryChannelLayer",
+        'BACKEND': "channels_redis.core.RedisChannelLayer",
+         "CONFIG": {
+            "hosts": [('redis', 6379)],  # Redis server address
+        },
     }
 }
 
@@ -101,8 +105,12 @@ CHANNEL_LAYERS = {
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',  # Docker service name
+        'PORT': '5432'
     }
 }
 
@@ -157,6 +165,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 SITE_ID = 1  # Required for allauth
 

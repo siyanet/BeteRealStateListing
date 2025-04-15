@@ -10,6 +10,9 @@ class ChatRoom(models.Model):
     customer = models.ForeignKey(CustomUser,related_name='customer_chats',on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now=True)
     
+    class Meta:
+        unique_together = ('customer', 'agent')  # Ensure only one room between a customer-agent pair
+
     def __str__(self):
         return f"chat between {self.agent} and {self.customer}"
     
