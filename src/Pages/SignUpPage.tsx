@@ -193,6 +193,7 @@ const SignUpPage:React.FC<AuthProp> = ({isOwner=false}) => {
       toast.success('form submited sucessfully');
       setIsLogin(true);
     } catch (error) {
+      console.log(error);
       // Handle any errors
       // console.error('Error submitting form:', error.response ? error.response.data : error.message);
       toast.error("error happend");

@@ -11,7 +11,7 @@ export interface Role {
   owner_email: string;
   owner_name: string;
   name: string;
-  permissions: Permission[];
+  permission_details: Permission[];
 }
 
 interface RoleState {

@@ -11,7 +11,8 @@ import UpperHeader from "../Components/UpperHeader"
 const LandingPage = () => {
   return (
     <div className="w-full h-full bg-white">
-        <UpperHeader/>
+      <div className="hidden md:block">  <UpperHeader/></div>
+      
         <Header/>
         <PopularListing/>
         <AboutUs/>

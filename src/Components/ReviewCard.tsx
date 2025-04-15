@@ -6,7 +6,7 @@ interface ReviewCardProp  {
 }
 const ReviewCard:React.FC<ReviewCardProp> = ({name,word,number}) => {
   return (
-    <div className="font-lato text-black bg-white shadow-2xl border-2 border-gray-200 rounded">
+    <div className="font-lato p-4 text-black bg-white shadow-2xl border-2 border-gray-200 rounded">
 <p>
   {word}
 

@@ -13,9 +13,9 @@ const OwnerSideBar = () => {
         { icon: <User />, label: "Profile",path:'/' },
         { icon: <MessageCircle />, label: "Messages",path: '/' },
         { icon: <Workflow/>,label: "Role",path: "/role"},
-        { icon: <Users />, label: "Teams" ,path: '/'},
-        { icon: <Briefcase />, label: "Agents",path: '/' },
-        { icon: <PlusCircle />, label: "Add Property",path: '/' },
+        { icon: <Users />, label: "Teams" ,path: '/team_member'},
+        { icon: <Briefcase />, label: "Agents",path: '/agents' },
+        { icon: <PlusCircle />, label: "Add Property",path: '/add_property' },
         { icon: <Star />, label: "Review" ,path:'/'},
 
       ];

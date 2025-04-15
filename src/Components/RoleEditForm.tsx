@@ -1,5 +1,5 @@
 import { useState,useEffect } from "react";
-import { fetchRoles, Permission, Role } from "../Redux/role";
+import { fetchRoles,  Role } from "../Redux/role";
 import { CheckboxLabel, CheckboxWrapper, CustomCheckbox, FormContainer, FormTitle, FormWrapper, InputField, InputLabel, RedButton, SubmitButton } from "./FormComponents";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +16,7 @@ interface RoleEditFormProps {
 }
 const RoleEditForm:React.FC<RoleEditFormProps> = ({onClose,role}) => {
 const [roleName,setRoleName] = useState<string>(role.name)
-const [selectedPermission ,setSelectedPermission] = useState<number[]>(role.permissions.map((permission) => permission.id))
+const [selectedPermission ,setSelectedPermission] = useState<number[]>(role.permission_details.map((permission) => permission.id))
 const dispatch = useDispatch<AppDispatch>();
   const { permissions, permissions_status, permissions_error } = useSelector(
     (state: RootState) => state.permissions

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchRoles, Permission } from "../Redux/role";
+import { fetchRoles } from "../Redux/role";
 import axiosInstance from "./axiosInstance";
 import { CheckboxLabel, CheckboxWrapper, CustomCheckbox, FormContainer, FormTitle, FormWrapper, InputField, InputLabel, SubmitButton } from "./FormComponents";
 import { toast } from "react-toastify";

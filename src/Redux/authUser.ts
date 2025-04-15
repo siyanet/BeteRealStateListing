@@ -6,6 +6,7 @@ interface UserState {
     email: string;
     role: string;
     first_name: string;
+    uuid: string;
     last_name: string;
     auth_user_status: "idle" | "loading" | "succeeded" | "failed";
     auth_user_error: string | null;
@@ -15,6 +16,7 @@ interface UserState {
     role: "",
     first_name: "",
     last_name: "",
+    uuid: "",
     auth_user_status: "idle",
     auth_user_error: null,
   };
@@ -22,14 +24,15 @@ interface UserState {
   export const fetchUser = createAsyncThunk<UserState,void,{rejectValue:string}>(
     'user/fetchUser',
     async (_, { rejectWithValue }) => {
-        try{
-            const response = await axiosInstance.get('auth/user/');
-          
-            return response.data as UserState;
-        }
-        catch(error: any){
-            return rejectWithValue(error.response?.data||'failed to fetch user');
-        }
+        console.log("[fetchUser] Started fetching user...");
+    try {
+      const response = await axiosInstance.get("auth/user/");
+      console.log("[fetchUser] Success:", response.data);
+      return response.data as UserState;
+    } catch (error: any) {
+      console.error("[fetchUser] Error:", error);
+      return rejectWithValue(error.response?.data || "Failed to fetch user");
+    }
     }
   );
 
@@ -48,6 +51,7 @@ interface UserState {
             state.role = action.payload.role;
             state.first_name = action.payload.first_name;
             state.last_name = action.payload.last_name;
+            state.uuid = action.payload.uuid;
         })
         .addCase(fetchUser.rejected,(state,action) =>{
             state.auth_user_status = "failed";

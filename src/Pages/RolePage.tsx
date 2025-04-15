@@ -4,13 +4,15 @@ import { fetchRoles, Permission, Role } from "../Redux/role";
 import { AppDispatch, RootState } from "../Redux/store";
 import OwnerComponent from "../Components/OwnerComponent";
 import { TableWrapper, StyledTable, TableHeader, TableRow, TableHeaderCell, TableCell } from "../Components/TableComponent"; // Importing the styled components
-import { Delete, Edit, Plus } from "lucide-react";
+import { Delete, Edit } from "lucide-react";
 import OverlayComponent from "../Components/OverlayComponent";
 import RoleAddForm from "../Components/RoleAddForm";
 import RoleEditForm from "../Components/RoleEditForm";
 import { FormTitle, RedButton, SubmitButton } from "../Components/FormComponents";
 import axiosInstance from "../Components/axiosInstance";
 import { toast } from "react-toastify";
+import OwnerTableHeader from "../Components/OwnerTableHeader";
+import LoadingSpinner from "../Components/loading";
 
 const RolesComponent = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -24,13 +26,7 @@ const RolesComponent = () => {
     dispatch(fetchRoles());
   }, [dispatch]);
 
-  if (roles_status === "loading") {
-    return <div>Loading...</div>;
-  }
 
-  if (roles_status === "failed") {
-    return <div>Error: {roles_error}</div>;
-  }
 
   const handleAddRole = () => {
     // Add the logic to handle the new role creation
@@ -67,11 +63,14 @@ const RolesComponent = () => {
   return (
 
     <OwnerComponent>
+
+{roles_status === "loading" && <LoadingSpinner/>}
+        {roles_status === "failed" && <div className='flex justify-center items-center'> <h1 className='text-red text-bold'>error {roles_error}</h1></div>}
+        {roles_status === 'succeeded' && 
+
       <div className="w-full h-full">
-        <div className="flex justify-between items-center">
-          <h1 className="p-2 font-bold text-md md:text-xl font-lato gradient-text">Role</h1>
-          <Plus onClick={() => setIsOverlayOpen(true)} className="cursor-pointer" /> 
-        </div>
+       
+        <OwnerTableHeader onClick={() => setIsOverlayOpen(true)} name = "Role"/>
 
         {/* Table Section */}
         <TableWrapper>
@@ -88,7 +87,7 @@ const RolesComponent = () => {
               {roles.map((role:Role) => (
                 <TableRow key={role.uuid}>
                   <TableCell>{role.name}</TableCell>
-                  <TableCell>{role.permissions.map((permission: Permission) => (
+                  <TableCell>{role.permission_details.map((permission: Permission) => (
                     <span key={permission.id}>{permission.name}, </span>
                   ))}</TableCell>
                   <div className="flex px-[12px] py-[15px] justify-around items-center text-center text-amber-500 ">
@@ -101,7 +100,7 @@ const RolesComponent = () => {
             </tbody>
           </StyledTable>
         </TableWrapper>
-      </div>
+      </div> }
 
 
 
