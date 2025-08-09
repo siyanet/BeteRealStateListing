@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -54,6 +56,8 @@ INSTALLED_APPS = [
     'channels',
     'chat',
     'django_extensions',
+    'cloudinary',
+    'cloudinary_storage',
     
 ]
 
@@ -108,12 +112,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',  # Docker service name
-        'PORT': '5432'
+        'PASSWORD': '#Beskilled2',  # <-- replace this
+        'HOST': 'db.gfscsqtsxxpjjtwyjtad.supabase.co',
+        'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',  # Supabase requires SSL connection
+        },
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -195,3 +201,5 @@ ACCOUNT_USERNAME_REQUIRED = False
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')

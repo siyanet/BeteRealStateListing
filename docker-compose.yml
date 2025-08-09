@@ -1,3 +1,41 @@
+# services:
+#   web:
+#     build: .
+#     command: daphne -b 0.0.0.0 -p 8000 bete.asgi:application
+#     volumes:
+#       - .:/app
+#     ports:
+#       - "8000:8000"
+#     depends_on:
+#       - redis
+#       - db
+  
+#   db:
+#     image: postgres:13
+#     environment:
+#       - DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.gfscsqtsxxpjjtwyjtad.supabase.co:5432/postgres
+
+#     ports:
+#       - "5432:5432"
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data/
+
+#   redis:
+#     image: redis:6
+#     ports:
+#       - "6379:6379"
+#     volumes:
+#       - redis_data:/data
+
+# volumes:
+#   postgres_data:
+#   redis_data:
+
+
+
+
+
+
 services:
   web:
     build: .
@@ -8,18 +46,8 @@ services:
       - "8000:8000"
     depends_on:
       - redis
-      - db
-  
-  db:
-    image: postgres:13
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - CLOUDINARY_URL=CLOUDINARY_URL=cloudinary://764748751771711:I26LtU2ec5GyJ9EzajRhC8iqJIs@dkqfwjomz
 
   redis:
     image: redis:6
@@ -29,5 +57,4 @@ services:
       - redis_data:/data
 
 volumes:
-  postgres_data:
   redis_data:

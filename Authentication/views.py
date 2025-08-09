@@ -2,12 +2,12 @@ from django.contrib.auth.models import Group
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
 from rest_framework import viewsets, filters, generics,permissions,status
-from .models import Owner, TeamMember, CustomUser,Role,Agent,Property
+from .models import Owner, Review, TeamMember, CustomUser,Role,Agent,Property
 from rest_framework.response import Response
 from django.contrib.auth.hashers import check_password
 from rest_framework.permissions import AllowAny, BasePermission
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import RoleSerializer, PropertySerializer,PropertyImageSerializer, get_allowed_permissions, OwnerSerializer,TeamMemberSerializer,UserSerializer,AgentSerializer
+from .serializers import RoleSerializer, OwnerHomePageSerializer, ReviewSerializer,PropertySerializer,PropertyImageSerializer, get_allowed_permissions, OwnerSerializer,TeamMemberSerializer,UserSerializer,AgentSerializer
 from django.db import transaction
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -34,7 +34,12 @@ class IsAdminUser(BasePermission):
 class IsOwner(BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated and request.user.group and request.user.group.name == 'Owner'
-
+    
+    
+class IsCustomer(BasePermission):
+    def has_permission(self,request,view):
+        return request.user.is_authenticated and request.user.group and request.user.group.name == "Customer"
+      
 class IsTeamMemberHasPermissionOnAgent(BasePermission):
     
     def has_permission(self,request,view):
@@ -153,6 +158,8 @@ class ApproveOwnersAPIView(APIView):
         owner.user.save()
         owner.save()
         return Response({"message": "Owner Verified succesfully"},status=status.HTTP_200_OK)
+
+
 class ListInActiveOwners(generics.ListAPIView):
     queryset = Owner.objects.filter(user__is_active = False)
     serializer_class = OwnerSerializer
@@ -261,3 +268,96 @@ class LogoutView(APIView):
             return Response({"message": "Logged out successfully"}, status=200)
         except Exception as e:
             return Response({"error": str(e)}, status=400)
+        
+        
+        
+class ReviewViewSet(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    
+    
+    def get_permissions(self):
+        if self.action == "create":
+            return [IsCustomer()]
+        return [AllowAny()]
+   
+    
+    def perform_create(self,serializer):
+      
+        serializer.save(customer = self.request.user)
+        
+    @action(detail=False, methods=['get'], url_path='property/(?P<property_id>[^/.]+)')
+    def property_reviews(self, request, property_id=None):
+        try:
+            property_obj = Property.objects.get(id=property_id)
+        except Property.DoesNotExist:
+            return Response({'detail': 'Property not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
+        reviews = Review.objects.filter(property=property_obj)
+        serializer = self.get_serializer(reviews, many=True)
+        return Response(serializer.data)
+    
+    
+    
+    
+    
+
+
+class UpdateOwnerProfileView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get(self, request):
+        # Try to get the authenticated user's owner profile
+        try:
+            owner = request.user.owner_profile
+        except Owner.DoesNotExist:
+            return Response({"detail": "Owner profile does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Return the owner data (with nested user data)
+        return Response({
+            "owner": OwnerSerializer(owner).data
+        }, status=status.HTTP_200_OK)
+
+
+    def put(self, request):
+        # Make sure the logged-in user has an owner profile
+        try:
+            owner = request.user.owner_profile
+        except Owner.DoesNotExist:
+            return Response({"detail": "Owner profile does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+        owner_data = request.data.copy()
+        user_data = owner_data.pop('user', {})
+
+        # Update user fields
+        user_serializer = UserSerializer(instance=request.user, data=user_data, partial=True)
+        # Update owner fields
+        owner_serializer = OwnerSerializer(instance=owner, data=owner_data, partial=True)
+
+        if user_serializer.is_valid(raise_exception=True) and owner_serializer.is_valid(raise_exception=True):
+            user_serializer.save()
+            owner_serializer.save()
+            return Response({
+                "message": "Profile updated successfully",
+                "owner": OwnerSerializer(owner).data
+            }, status=status.HTTP_200_OK)
+
+        return Response({
+            "user_errors": user_serializer.errors,
+            "owner_errors": owner_serializer.errors,
+        }, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+        
+
+class OwnerHomePageAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        try:
+            owner = request.user.owner_profile  # Related name from your model
+        except Owner.DoesNotExist:
+            return Response({"error": "Owner profile not found."}, status=404)
+
+        serializer = OwnerHomePageSerializer(owner, context={'request': request})
+        return Response(serializer.data)

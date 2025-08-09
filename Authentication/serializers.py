@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model
-from .models import Owner,TeamMember,CustomUser,Role,Agent,Property,PropertyImage
+from .models import Review, Owner,TeamMember,CustomUser,Role,Agent,Property,PropertyImage
 from django.contrib.auth.models import Permission
 from rest_framework.exceptions import ValidationError
 from django.db import transaction
@@ -244,3 +244,52 @@ class PropertySerializer(serializers.ModelSerializer):
 
         return property_instance
     
+class ReviewSerializer(serializers.ModelSerializer):
+    customer_name = serializers.ReadOnlyField(source='customer.first_name')
+
+    class Meta:
+        model = Review
+        fields = ['uuid', 'property', 'customer_name', 'rating', 'comment', 'created_at']
+        read_only_fields = ['uuid', 'customer_name', 'created_at']
+
+
+
+class OwnerHomePageSerializer(serializers.ModelSerializer):
+    total_properties = serializers.SerializerMethodField()
+    available_properties = serializers.SerializerMethodField()
+    sold_properties = serializers.SerializerMethodField()
+    total_agents = serializers.SerializerMethodField()
+    total_team_members = serializers.SerializerMethodField()
+    recent_properties = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Owner
+        fields = [
+            'business_name',
+            'verified',
+            'total_properties',
+            'available_properties',
+            'sold_properties',
+            'total_agents',
+            'total_team_members',
+            'recent_properties',
+        ]
+
+    def get_total_properties(self, obj):
+        return obj.properties.count()
+
+    def get_available_properties(self, obj):
+        return obj.properties.filter(is_available=True).count()
+
+    def get_sold_properties(self, obj):
+        return obj.properties.filter(is_available=False).count()
+
+    def get_total_agents(self, obj):
+        return obj.agents.count()
+
+    def get_total_team_members(self, obj):
+        return obj.team_members.count()
+
+    def get_recent_properties(self, obj):
+        properties = obj.properties.order_by('-created_at')[:5]
+        return PropertySerializer(properties, many=True, context=self.context).data

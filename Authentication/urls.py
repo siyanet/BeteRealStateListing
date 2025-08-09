@@ -1,6 +1,6 @@
 from django.urls import path,include
 from rest_framework.routers import DefaultRouter
-from .views import RegisterUserView, TeamMemberViewSet, LogoutView, get_authenticated_user, ListAllowedPermissions,RoleViewSet, PropertyViewSet, ApproveOwnersAPIView, ListInActiveOwners,RegisterTeamMemberView,RegisterOwnerView,LoginAPIView,AgentViewSet
+from .views import RegisterUserView, OwnerHomePageAPIView, TeamMemberViewSet, UpdateOwnerProfileView, ReviewViewSet, LogoutView, get_authenticated_user, ListAllowedPermissions,RoleViewSet, PropertyViewSet, ApproveOwnersAPIView, ListInActiveOwners,RegisterTeamMemberView,RegisterOwnerView,LoginAPIView,AgentViewSet
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -11,6 +11,7 @@ router.register(r'roles',RoleViewSet,basename='role')
 router.register(r'team_members',TeamMemberViewSet,basename='team_member')
 router.register(r'agent',AgentViewSet,basename='agent')
 router.register(r'property',PropertyViewSet,basename='property')
+router.register(r'review',ReviewViewSet,basename="review")
 urlpatterns = [
     path('register/user/',RegisterUserView.as_view(),name = 'register_user'),
     path('register/owner/',RegisterOwnerView.as_view(),name = 'register_owner'),
@@ -25,5 +26,7 @@ urlpatterns = [
     path('listpermissions/',ListAllowedPermissions.as_view(),name='allowed_permissions'),
     path('auth/user/',get_authenticated_user,name='authenticated-user'),
     path("logout/", LogoutView.as_view(), name="logout"),
+    path('owner/profile/update/', UpdateOwnerProfileView.as_view(), name='owner-profile-update'),
+    path('owner/homepage/', OwnerHomePageAPIView.as_view(), name='owner-homepage'),
     path('',include(router.urls),)
 ]
