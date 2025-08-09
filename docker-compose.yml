@@ -47,7 +47,7 @@ services:
     depends_on:
       - redis
     environment:
-      - CLOUDINARY_URL=CLOUDINARY_URL=cloudinary://764748751771711:I26LtU2ec5GyJ9EzajRhC8iqJIs@dkqfwjomz
+      - CLOUDINARY_URL=cloudinary://764748751771711:I26LtU2ec5GyJ9EzajRhC8iqJIs@dkqfwjomz
 
   redis:
     image: redis:6
