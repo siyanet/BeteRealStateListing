@@ -108,17 +108,11 @@ CHANNEL_LAYERS = {
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': '#Beskilled2',  # <-- replace this
-        'HOST': 'db.gfscsqtsxxpjjtwyjtad.supabase.co',
-        'PORT': '5432',
-        'OPTIONS': {
-            'sslmode': 'require',  # Supabase requires SSL connection
-        },
-    }
+    'default':  dj_database_url.parse(
+        os.getenv('DATABASE_URL', 'postgresql://beteapp_user:7pZ5lpodnjwU9ZNIjlU6hiKiDNslMdXy@dpg-d2bu4efdiees73f4deu0-a/beteapp'),
+        conn_max_age=600,
+        ssl_require=False  # Render internal DB might not need SSL
+    )
 }
 
 # Password validation
