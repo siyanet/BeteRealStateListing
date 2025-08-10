@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-_m^u@*zndz$)j6mezyi@o2z&d1k+**(1h4#xw-v#c+b4v-=&j7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['betebackend.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
