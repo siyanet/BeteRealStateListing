@@ -56,8 +56,8 @@ INSTALLED_APPS = [
     'channels',
     'chat',
     'django_extensions',
-    'cloudinary',
-    'cloudinary_storage',
+    # 'cloudinary',
+    # 'cloudinary_storage',
     
 ]
 
@@ -107,12 +107,26 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default':  dj_database_url.parse(
+#         os.getenv('DATABASE_URL', 'postgresql://beteapp_user:7pZ5lpodnjwU9ZNIjlU6hiKiDNslMdXy@dpg-d2bu4efdiees73f4deu0-a/beteapp'),
+#         conn_max_age=600,
+#         ssl_require=False  # Render internal DB might not need SSL
+#     )
+# }
+
+
 DATABASES = {
-    'default':  dj_database_url.parse(
-        os.getenv('DATABASE_URL', 'postgresql://beteapp_user:7pZ5lpodnjwU9ZNIjlU6hiKiDNslMdXy@dpg-d2bu4efdiees73f4deu0-a/beteapp'),
-        conn_max_age=600,
-        ssl_require=False  # Render internal DB might not need SSL
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',  # Docker service name
+        'PORT': '5432'
+    }
 }
 
 # Password validation
@@ -196,5 +210,5 @@ ACCOUNT_USERNAME_REQUIRED = False
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')

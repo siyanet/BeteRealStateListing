@@ -46,7 +46,7 @@ class OwnerSerializer(serializers.ModelSerializer):
         extra_kwargs = {'uuid,updated_at,created_at,verified': {'read_only': True}}
     def create(self, validated_data):
         user_data = validated_data.pop('user')
-        user = CustomUser.objects.create_user(**user_data,is_active=False)
+        user = CustomUser.objects.create_user(**user_data,is_active=True)
         owner = Owner.objects.create(user=user, **validated_data)
         return owner
     
