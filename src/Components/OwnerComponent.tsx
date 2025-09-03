@@ -7,11 +7,11 @@ interface OwnerComponentProps {
   }
   const OwnerComponent:React.FC<OwnerComponentProps> = ({children}) => {
     return (
-      <div className="w-screen h-screen">
+      <div className="w-screen h-screen ">
         <OwnerHeader/>
-        <div className="flex pt-10 gap-2 pr-3 md:pt-15 ">
+        <div className="flex pt-10 gap-2 pr-3 md:pt-15 relative ">
           <OwnerSideBar/>
-          <div className="w-full">{children}</div>
+          <div className="flex-1 px-2 overflow-y-auto">{children}</div>
   
         </div>
           

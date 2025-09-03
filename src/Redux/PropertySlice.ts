@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axiosInstance from "../Components/axiosInstance";
-import { User } from "./teamMember";
+
 import { BusinessOwner } from "./OwnerDetail";
 import { Agent } from "./agentSlice";
 
@@ -91,6 +91,8 @@ export const fetchProperties = createAsyncThunk<
     if (page_size) params.append("page_size", page_size.toString());
 
     const response = await axiosInstance.get(`/property/?${params.toString()}`);
+    console.log("Requesting properties with params:", params.toString());
+
     return response.data as PaginatedPropertyResponse;
   } catch (error: any) {
     return rejectWithValue(error.response?.data || "Failed to fetch properties");

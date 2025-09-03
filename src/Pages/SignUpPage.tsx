@@ -240,7 +240,11 @@ const handleLoginSubmit = async(e: React.MouseEvent<HTMLButtonElement>) =>{
           navigate("/owner-dashboard");
         } else if (role === "Customer") {
           navigate("/");
-        } else {
+        }
+        else if(role === "agent"){
+          navigate("/chatlist")
+        } 
+        else {
           navigate("/user-dashboard");
         }
       }, 2000);
@@ -249,7 +253,7 @@ const handleLoginSubmit = async(e: React.MouseEvent<HTMLButtonElement>) =>{
      }
       // Handle the response
       console.log('Form submitted successfully:', response.data);
-      toast.success('login sucessfully');
+     
     } catch (error) {
       // Handle any errors
       // console.error('Error submitting form:', error.response ? error.response.data : error.message);

@@ -80,7 +80,7 @@ export const InputField = styled.input`
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: #f6e9d2;
-  font-size: 16px;
+  font-size: 12px;
   color: #333;
   margin-bottom: 15px;
   outline: none;

@@ -1,15 +1,16 @@
+import { FacebookIcon, InstagramIcon, LinkedinIcon, Mail, MapPin, Phone, TwitterIcon } from "lucide-react"
 
 
 const Footer = () => {
   return (
-    <div>
-      <div className="bg-amber-400">
-      <div className="flex justify-between items-center w-full h-full">
-        <div>
-          <i className="fas fa-facebook"/>
-          <i className="fas fa-instagram"/>
-          <i className="fas fa-linkedin"/>
-          <i className="fas fa-twitter"/>
+    <div className="font-lato ">
+      <div className="bg-amber-400 p-4 flex flex-col gap-3">
+      <div className="flex justify-between items-center w-full h-full flex-col md:flex-row gap-3 ">
+        <div className="flex flex-col  gap-2 ">
+          <FacebookIcon/>
+          <InstagramIcon/>
+          <TwitterIcon/>
+          <LinkedinIcon/>
 
         </div>
         <div className="flex flex-col justify-center items-center">
@@ -19,19 +20,36 @@ const Footer = () => {
           </p>
 
         </div>
-        <div>
-          <p><i className="fas fa-phone"/>251043989437</p>
-          <p><i className="fas fa-envelope"/>Bete@gmail.com</p>
-          <p><i className="fas fa-map-marker"/>AddisAbaba,Megengna 22</p>
+        <div className="flex flex-col justify-center items-center gap-2">
+          <div className="flex justify-center gap-1">
+            <Phone/>
+            <p>251043989437</p>
+            </div>
+            <div className="flex justify-center gap-1">
+            <Mail/>
+   
+            <p>Bete@gmail.com</p>
+            </div>
+            <div className="flex justify-center gap-1">
+            <MapPin/>
+        
+            <p>AddisAbaba,Megengna 22</p>
+            </div>
+           
+        
+          
+          
+        
+         
 
         </div>
       
     </div>
 
-    <div className="flex w-full h-full justify-between items-center">
+    <div className="flex w-full h-full justify-between items-center flex-col-reverse gap-2 md:flex-row">
         <h1>BETE</h1>
-        <div className="flex justify-between items-center gap-4">
-<p>Home</p>
+        <div className="flex font-bold  justify-between items-center gap-4">
+<p >Home</p>
 <p>Property</p>
 <p>Contact Us</p>
 <p>About Us</p>

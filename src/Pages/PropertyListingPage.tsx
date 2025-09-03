@@ -1,21 +1,20 @@
-import { ArrowLeft, ArrowRight, Backpack, Filter, Forward, Grid, List } from "lucide-react"
+import {  Grid, List,  SkipBack, SkipForward } from "lucide-react"
 import styled from "styled-components"
 import PropertyCard from "../Components/PropertyCard"
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useEffect, useState } from "react";
-
 import { AppDispatch, RootState } from "../Redux/store";
 import { fetchProperties } from "../Redux/PropertySlice";
 import LoadingSpinner from "../Components/loading";
-import UpperHeader from "../Components/UpperHeader";
-
 import Naviagtion from "../Components/Naviagtion";
 import { debounce } from "@mui/material";
 import { Link } from "react-router-dom";
+import Footer from "../Components/Footer";
+import MiddelSection from "../Components/MiddelSection";
 
 export const SearchInputField = styled.input`
   width: 100%;
-  max-width: 300px;
+  max-width: 230px;
   padding: 10px 16px;
   font-size: 16px;
   font-family: 'Lato', sans-serif;
@@ -40,12 +39,24 @@ export const SearchInputField = styled.input`
   &:hover {
     border-color: #f4e06c;
   }
+  @media (max-width: 768px) {
+    max-width: 120px;
+    font-size: 15px;
+    padding: 8px 14px;
+
+  }
+
+  @media (max-width: 480px) {
+    font-size: 9px;
+    padding: 7px 12px;
+    max-width: 70px;
+  }
 `;
 
 const PropertyListingPage = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { properties, properties_status,properties_error } = useSelector((state: RootState) => state.properties);
-  
+    const [isList,setIsList] = useState(false);
     const [search, setSearch] = useState("");
     const [location, setLocation] = useState("");
     const [minPrice, setMinPrice] = useState("");
@@ -73,13 +84,21 @@ const PropertyListingPage = () => {
   
     return (
     <div className="font-lato ">
-      <UpperHeader/>
-      <div className="pt-9"></div>
+    
+      <div className=""></div>
       <Naviagtion/>
-        <div className="flex pt-10 justify-between items-center flex-col">
-            <h1 className=" font-bold text-xl gradient-text  ">Property Listing</h1>
-            <p className="p-4 text-center" >Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur </p>
-        </div>
+      <div className="flex pt-15 justify-between items-center flex-col bg-gradient-to-br from-amber-200 via-amber-300 to-amber-500  shadow-md px-4 py-10">
+  <h1 className="font-bold text-3xl  mb-4 gradient-text">
+    Property Listing
+  </h1>
+  <p className="p-4 text-center text-white max-w-xl">
+    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur.
+  </p>
+</div>
+      <div className=" p-3 md:p-3 flex flex-col gap-2 ">
+
+   
+
 
 
 {properties_status == "loading" && <LoadingSpinner/>}
@@ -104,28 +123,28 @@ placeholder="Min Price"
 value={minPrice}
 onChange={(e) => setMinPrice(e.target.value)}
 />
-    <Filter/>
+   
     
 
 </div>
 
 
-<div className="flex justify-between items-center">
-    <p>showing</p>
+<div className="flex justify-between pb-5 items-center">
+    <p >Showing 2 of 2</p>
     <div className="flex gap-2">
-        <Grid/>
-        <List/>
+        <Grid className={`hover:text-amber-500 hover:text-xl ${isList? "" : "text-amber-500"}`} onClick={() => setIsList(false)}/>
+        <List className={`hover:text-amber-500 hover:text-xl ${isList? "text-amber-500" : ""}`} onClick={() => setIsList(true)}/>
     </div>
     
 </div>
 
 
-<div className="grid grid-cols-3 gap-4 pt-10">
+<div className="w-full flex flex-wrap gap-x-6 gap-y-7 justify-center  ">
  
 {properties.map((property) => (
   <div key={property.id}>
     <Link to={`/property/${property.id}`}>
-      <PropertyCard property={property} />
+      <PropertyCard property={property} isList= {isList} />
     </Link>
   </div>
 ))}
@@ -133,17 +152,23 @@ onChange={(e) => setMinPrice(e.target.value)}
 
 <div className="flex justify-center items-center mt-4">
 <button
-className="px-4 py-2 bg-gray-200 rounded"
+className="px-4 py-2 text-gray-500  "
 onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
 >
-<ArrowLeft/>
+<SkipBack/>
 </button>
-<span className="mx-2">{page}</span>
+<div className="text-white md:text-xl md:font-extrabold rounded p-2 md:p-3  bg-gradient-to-br from-amber-300 via-amber-400 to-amber-500"> <p>{page}</p></div>
+
+
+
+
+
+
 <button
-className="px-4 py-2 bg-gray-200 rounded"
+className="px-4 py-2 text-gray-500"
 onClick={() => setPage((prev) => prev + 1)}
 >
-<ArrowRight/>
+<SkipForward/>
 </button>
 </div>
 
@@ -152,6 +177,15 @@ onClick={() => setPage((prev) => prev + 1)}
 
 
 
+
+
+
+
+      </div>
+      <MiddelSection/>
+
+<Footer/>
+      
        
       
 
@@ -159,4 +193,4 @@ onClick={() => setPage((prev) => prev + 1)}
   )
 }
 
-export default PropertyListingPage
+export default PropertyListingPage;

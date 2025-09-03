@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../Components/axiosInstance";
+import { User } from "../Redux/teamMember";
 
 // Types
-interface Message {
+export interface Message {
   id: number;
   room: number;
   sender: string;
   content: string;
+  sender_detail: User;
   timestamp: string;
 }
 
-interface ChatRoom {
+export interface ChatRoom {
   id: number;
   agent: number;
   customer: string;
@@ -63,7 +65,7 @@ const ChatRoomList: React.FC = () => {
                 className="cursor-pointer p-4 border rounded-md hover:bg-gray-100 transition"
               >
                 <div className="font-medium">
-                  Room #{room.id} — Customer:{" "}
+                  Chat #{room.id} — Customer:{" "}
                   <span className="text-blue-600">{room.customer}</span>
                 </div>
                 <div className="text-sm text-gray-700">

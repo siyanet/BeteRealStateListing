@@ -1,12 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./authUser";
 import roleReducer from "./role";
-import { persistStore, persistReducer } from 'redux-persist';
+// import { persistStore, persistReducer } from 'redux-persist';
 // import storage from 'redux-persist/lib/storage'; 
 import permissionsReducer from './permissions';
 import teamMembersReducer from './teamMember';
 import agentsReducer from "./agentSlice";
 import propertiesReducer from "./PropertySlice";
+import reviewsReducer from "./ReviewSlice";
 // const persistConfig = {
 //   key: 'root', // Key for storage
 //   storage, // Use localStorage
@@ -23,6 +24,7 @@ export const store = configureStore({
     teamMembers: teamMembersReducer,
     agents: agentsReducer,
     properties: propertiesReducer,
+    reviews: reviewsReducer,
   },
   // Add other reducers if needed
 });

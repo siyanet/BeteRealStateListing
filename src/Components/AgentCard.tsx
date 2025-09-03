@@ -24,18 +24,24 @@ const AgentCard:React.FC<AgentCardProp> = ({agent}) => {
   
   
     return (
-    <div className="flex justify-between font-lato items-center">
-        <div className="w-20 h-20 rounded-full overflow-hidden">
+    <div className="flex justify-between shadow p-2 md:p-5 font-lato items-center">
+       <div className="flex gap-4">
+
+       <div className="w-20 h-20 rounded-full overflow-hidden">
             <img className="w-full h-full object-cover" src = {agent.profile_image} alt="Agent Profile Image"/>
         </div>
-        <div>
-            <div className="flex justify-between items-center ">
+       <div className="flex flex-col  items-start ">
             <h1 className="font-bold">{agent.user.first_name} {agent.user.last_name}  </h1>
-            <MessageCircleIcon onClick={handleChatClick} className="cursor-pointer" />
-
-            </div>
-     
+           
             <p className="text-gray-300">{agent.bio}</p>
+            </div>
+
+       </div>
+      
+        <div className="flex flex-col justify-between gap-5 items-end">
+          
+        <MessageCircleIcon onClick={handleChatClick} className="cursor-pointer hover:text-amber-500" />
+           
             <div className="flex justify-end items-center">
                 <Phone/>
                 {agent.phone_number}

@@ -41,11 +41,27 @@
 
 // export default axiosInstance;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import axios from 'axios';
 
 // Axios instance
 const axiosInstance = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api/', // Your API URL
+  baseURL: 'https://betebackend.onrender.com/api/', // Your API URL
   headers: {
     'Content-Type': 'application/json',
   },
@@ -84,7 +100,7 @@ axiosInstance.interceptors.response.use(
       const refreshToken = localStorage.getItem('bete_refresh_token');
       if (refreshToken) {
         try {
-          const response = await axios.post<RefreshTokenResponse>('http://127.0.0.1:8000/api/token/refresh/', {
+          const response = await axios.post<RefreshTokenResponse>('https://betebackend.onrender.com/api/token/refresh/', {
             refresh: refreshToken,
           });
 
@@ -113,3 +129,6 @@ axiosInstance.interceptors.response.use(
 );
 
 export default axiosInstance;
+
+
+

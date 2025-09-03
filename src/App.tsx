@@ -12,7 +12,7 @@ import NotFoundPage from "./Pages/NotFoundPage";
 import ForbiddenPage from "./Pages/ForbiddenPage";
 import { store} from "./Redux/store";
 import ProtectedRoute from "./Components/ProtectedRoute";
-import { PersistGate } from "redux-persist/integration/react";
+// import { PersistGate } from "redux-persist/integration/react";
 import RolePage from "./Pages/RolePage";
 import TeamMemberPage from "./Pages/TeamMember";
 import AgentsPage from "./Pages/AgentsPage";
@@ -21,6 +21,12 @@ import PropertyListingPage from "./Pages/PropertyListingPage";
 import PropertyDetailsPageForCustomer from "./Pages/PropertyDetailsPageForCustomer";
 import AgentCustomerChatPage from "./Pages/AgentCustomerChatPage";
 import ChatRoomList from "./Pages/AgentChatListPage";
+import AboutUsPage from "./Pages/AboutUsPage";
+import ContactUsPage from "./Pages/ContactUsPage";
+import OwnerReviewView from "./Pages/OwnerReviewView";
+
+import OwnerProfile from "./Pages/OwnerProfile";
+import ChatList from "./Pages/Chatlist";
 
 
 function App() {
@@ -45,7 +51,8 @@ function App() {
     />
     <Routes>
       <Route path="/" element={<LandingPage />} />
-      <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/signup" element={<SignUpPage isOwner={false} />} />
+      <Route path="/signupasRealStateOwner" element={<SignUpPage isOwner />} />
       <Route path="/owner-dashboard" element={<ProtectedRoute allowedRoles={['Owner']}><OwnerDashboard/></ProtectedRoute>} />
       <Route path='/owner-property' element={<OwnerProperty/>}/>
       <Route path="/403" element={<ForbiddenPage/>}/>
@@ -58,8 +65,11 @@ function App() {
       <Route path="/property/:id" element={<PropertyDetailsPageForCustomer />} />
       <Route path="/chat/:id" element={<AgentCustomerChatPage />} />
       <Route path="/chat/list" element = {<ChatRoomList/>}/>
-    
-
+      <Route path="/aboutus" element = {<AboutUsPage/>}/>
+      <Route path = "/contactus" element = {<ContactUsPage/>}/>
+      <Route path = '/review' element = {<OwnerReviewView/>}/>
+      <Route path = '/chatlist' element = {<ChatList/>}/>
+      <Route path = '/owner_profile' element = {<OwnerProfile/>}/>
     </Routes>
   </Router>
       {/* </PersistGate> */}

@@ -34,26 +34,24 @@ const PopularListing:React.FC = () => {
     fetchPopularListings();
   }, []);
   return (
-    <div className="w-full  h-full flex items-center mt-10 flex-col justify-center">
-        <h1 className="font-lato font-bold gradient-text ">Latest Listings</h1>
-   <Button>View</Button>
+    <div className="w-full  h-full flex items-center p-5 flex-col gap-5 justify-center">
+        <h1 className="font-lato font-bold text-2xl gradient-text ">Latest Listings</h1>
+ 
    {loading && <LoadingSpinner/>}
    {error && <div className="w-full flex justify-center items-center"><p className="text-red-500 font-lato">{error}</p></div>}
 
 
-   <div className="flex justify-between items-center space-x-4 p-8">
+   <div className="flex flex-wrap justify-center gap-5 md:justify-between w-full items-center space-x-4">
     {properties.map((property,index) =>(
         <PropertyCard key={index} property={property}/>
     ))}
 
    </div>
+   <Button>See More</Button>
 
 
 
-   <div className="flex justify-between items-center w-full h-full">
-    <Button>Previous</Button>
-    <Button>Next</Button>
-   </div>
+
       
     </div>
   )
