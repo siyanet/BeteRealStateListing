@@ -15,7 +15,7 @@ const AgentCard:React.FC<AgentCardProp> = ({agent}) => {
           const response = await axiosInstance.post("/chat/get-or-create-room/", {
             agent_id: agent.id,
           });
-          const roomId = response.data.room_id;
+          const roomId = (response.data as {room_id:string}).room_id;
           navigate(`/chat/${roomId}`);
         } catch (error) {
           console.error("Error creating/getting chat room:", error);

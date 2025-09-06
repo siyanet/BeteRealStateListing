@@ -94,8 +94,9 @@ export const fetchProperties = createAsyncThunk<
     console.log("Requesting properties with params:", params.toString());
 
     return response.data as PaginatedPropertyResponse;
-  } catch (error: any) {
-    return rejectWithValue(error.response?.data || "Failed to fetch properties");
+  } catch (error) {
+    console.log(error)
+    return rejectWithValue( "Failed to fetch properties");
   }
 });
 

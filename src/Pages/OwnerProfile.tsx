@@ -3,7 +3,7 @@ import { User } from '../Redux/teamMember';
 import axiosInstance from '../Components/axiosInstance';
 import OwnerComponent from '../Components/OwnerComponent';
 import { InputField } from '../Components/FormComponents';
-import { Input, InputLabel } from '@mui/material';
+import {  InputLabel } from '@mui/material';
 import { Edit } from 'lucide-react';
 import { toast } from 'react-toastify';
 
@@ -32,15 +32,16 @@ const OwnerProfile: React.FC = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axiosInstance.get('owner/profile/update/');
-        setProfile(response.data.owner);
-        setFormData({
-          first_name: response.data.owner.user.first_name,
-          last_name: response.data.owner.user.last_name,
-          email: response.data.owner.user.email,
-          business_name: response.data.owner.business_name,
-          contact_number: response.data.owner.contact_number
-        });
+          const response = await axiosInstance.get<{ owner: OwnerProfileData }>('owner/profile/update/');
+          const ownerData = response.data.owner;
+          setProfile(ownerData);
+          setFormData({
+            first_name: ownerData.user.first_name,
+            last_name: ownerData.user.last_name,
+            email: ownerData.user.email,
+            business_name: ownerData.business_name,
+            contact_number: ownerData.contact_number
+          });
       } catch (error) {
         console.error('Error fetching profile data:', error);
       }

@@ -155,6 +155,7 @@ const SignUpPage:React.FC<AuthProp> = ({isOwner=false}) => {
 
   }
   catch(error){
+    console.log(error);
     // console.error('Error submitting form:', error.response ? error.response.data : error.message);
     toast.error("error happend");
   }
@@ -186,7 +187,7 @@ const SignUpPage:React.FC<AuthProp> = ({isOwner=false}) => {
         first_name: formData.fname,
         last_name: formData.lname
       }
-      const response = await axiosInstance.post("register/user/", formatedData);
+  const response = await axiosInstance.post<{ message: string }>("register/user/", formatedData);
   
       // Handle the response
       console.log('Form submitted successfully:', response.data);
@@ -223,13 +224,13 @@ const handleLoginSubmit = async(e: React.MouseEvent<HTMLButtonElement>) =>{
         password: formData.lpassword
       }
       // Send data to backend using Axios
-      const response = await axiosInstance.post("login/", formatedData);
+  const response = await axiosInstance.post<{ token: { access: string; refresh: string }, user: { role: string } }>("login/", formatedData);
      if(response.status == 200){
       console.log(response);
       localStorage.removeItem('bete_access_token');
       localStorage.removeItem('bete_refresh_token');
 
-      localStorage.setItem("bete_access_token",response.data.token.access);
+  localStorage.setItem("bete_access_token", response.data.token.access);
       localStorage.setItem('bete_refresh_token',response.data.token.refresh)
       dispatch(fetchUser());
       toast.success("login sucessfully");
@@ -255,6 +256,7 @@ const handleLoginSubmit = async(e: React.MouseEvent<HTMLButtonElement>) =>{
       console.log('Form submitted successfully:', response.data);
      
     } catch (error) {
+      console.log(error);
       // Handle any errors
       // console.error('Error submitting form:', error.response ? error.response.data : error.message);
       toast.error('login failed ')

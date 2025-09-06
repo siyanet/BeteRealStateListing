@@ -106,7 +106,7 @@ const AddPropertyPage = () => {
                   is_available: true,
                   selectedAgents: [],
                 });
-                dispatch(fetchProperties());
+                dispatch(fetchProperties({}));
               }
             } catch (error) {
               console.error(error);
