@@ -25,6 +25,7 @@ const PopularListing:React.FC = () => {
         );
         setProperties(response.data);
       } catch (err) {
+        console.log(err)
         setError("Failed to load latest listings.");
       } finally {
         setLoading(false);
@@ -43,7 +44,7 @@ const PopularListing:React.FC = () => {
 
    <div className="flex flex-wrap justify-center gap-5 md:justify-between w-full items-center space-x-4">
     {properties.map((property,index) =>(
-        <PropertyCard key={index} property={property}/>
+        <PropertyCard key={index} property={property} isList={false}/>
     ))}
 
    </div>

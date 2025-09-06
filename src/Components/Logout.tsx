@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import axiosInstance from "./axiosInstance";
 import { createPortal } from "react-dom";
-import OverlayComponent from "./OverlayComponent";
 
 const Logout = () => {
   const [showModal, setShowModal] = useState(false);

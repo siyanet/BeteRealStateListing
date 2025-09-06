@@ -176,7 +176,7 @@ const AgentCustomerChatPage = () => {
 
     axiosInstance
       .get(`/messages/?room_id=${roomId}`)
-      .then((res) => setMessages(res.data))
+      .then((res) => setMessages(res.data as MessageType[]))
       .catch((err) => console.error("Failed to fetch messages", err));
   }, [roomId]);
 
